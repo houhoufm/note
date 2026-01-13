@@ -93,7 +93,7 @@ pip install alibabacloud-oss-v2
 
 ## 环境变量
 ```
-echo "export OSS_ACCESS_KEY_ID='LTAI5tR5E5AWQXXwCg9Yc19q'" >> ~/.bashrc
+echo "export OSS_ACCESS_KEY_ID='LTAI5tR*****wCg9Yc19q'" >> ~/.bashrc
 echo "export OSS_ACCESS_KEY_SECRET='******'" >> ~/.bashrc
 source ~/.bashrc
 
