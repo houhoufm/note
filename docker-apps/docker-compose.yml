@@ -1,0 +1,53 @@
+services:
+  db:
+    image: mysql:8.0
+    # image: mariadb:lts
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass123
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: wppass123
+
+  wordpress:
+    build: .
+    #image: wordpress:latest
+    depends_on:
+      - db
+      - redis
+    #ports:
+    #  - "80:80"
+    expose:
+      - "80"
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wppass123
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_CONFIG_EXTRA: define('WP_REDIS_HOST', 'redis');
+
+  redis:
+      image: redis:alpine
+      restart: always
+      volumes:
+        - redis_data:/data
+
+  nginx:
+      image: nginx:latest
+      ports:
+        - "80:80"
+        - "443:443"
+      volumes:
+        - ./nginx/conf.d:/etc/nginx/conf.d
+        - ./cert:/etc/nginx/cert  # 自签证书文件夹
+      depends_on:
+        - wordpress
+      restart: always
+
+
+volumes:
+  db_data: {}
+  redis_data: {}
